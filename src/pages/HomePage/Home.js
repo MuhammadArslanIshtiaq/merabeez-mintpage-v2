@@ -47,7 +47,7 @@ function Home() {
     },
     NFT_NAME: "",
     SYMBOL: "",
-    MAX_SUPPLY: 1,
+    MAX_SUPPLY: 2,
     WEI_COST: 0,
     DISPLAY_COST: 0,
     GAS_LIMIT: 0,
@@ -100,22 +100,28 @@ function Home() {
   const decrementMintAmount = () => {
     let newMintAmount = mintAmount - 1;
     if (newMintAmount < 1) {
-      newMintAmount = 1;
+      newMintAmount = 0;
     }
     setMintAmount(newMintAmount);
     setDisplayCost(parseFloat(nftCost * newMintAmount).toFixed(2));
   };
 
   const incrementMintAmount = () => {
+    console.log(mintAmount);
+    console.log(max);
     let newMintAmount = mintAmount + 1;
+    console.log(newMintAmount);
+
     newMintAmount > max ? (newMintAmount = max) : newMintAmount;
+    console.log(mintAmount);
+    console.log(max);
     setDisplayCost(parseFloat(nftCost * newMintAmount).toFixed(2));
     setMintAmount(newMintAmount);
   };
 
   const maxNfts = () => {
     setMintAmount(max);
-
+    console.log(max);
     setDisplayCost(parseFloat(nftCost * max).toFixed(2));
   };
 
@@ -179,7 +185,6 @@ function Home() {
     // Get Contract State
     let currentState = await contract.methods.currentState().call();
     setState(currentState);
-    console.log(currentState);
 
     // Set Price and Max According to State
 
@@ -196,6 +201,7 @@ function Home() {
       setFeedback("Are you Whitelisted Member?");
 
       let wlMax = await contract.methods.maxMintAmountWL().call();
+      console.log({ wlMax });
       setMax(wlMax);
     } else {
       let puCost = await contract.methods.cost().call();
